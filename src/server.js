@@ -1,13 +1,14 @@
 require('dotenv').config();
 const app = require('./app');
 const { pool } = require('./config/db');
+const initDB = require('./config/initDB');
 
 const PORT = process.env.PORT || 4000;
 
-// Probar conexión a BD antes de levantar el servidor
 pool.connect()
-  .then(() => {
+  .then(async () => {
     console.log('✅ Conexión a PostgreSQL exitosa');
+    await initDB(); // crea tablas si no existen
     app.listen(PORT, () => {
       console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     });
